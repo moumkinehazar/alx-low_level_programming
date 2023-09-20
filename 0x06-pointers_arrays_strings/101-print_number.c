@@ -1,23 +1,38 @@
-#include <stdio.h>
+alx-low_level_programming/0x06-pointers_arrays_strings/101-print_number.c
+@EmadAnwer
+EmadAnwer task 9
+Latest commit 391eb37 yesterday
+ History
+ 1 contributor
+30 lines (27 sloc)  385 Bytes
 
-int main(void)
+/*
+ * 0x06. C - More pointers, arrays and strings
+ * task 9
+ */
+#include "main.h"
+/**
+ * print_number - encodes a string into  rot13.
+ * @n: number
+ * Return: *src encodd string into  rot13.
+ */
+void print_number(int n)
 {
-	int n;
-	int a[5];
-	int *p;
+	unsigned int n1;
 
-	a[2] = 1024;
-	p = &n;
-	/*
-	 * write your line of code here...
-	 * Remember:
-	 * - you are not allowed to use a
-	 * - you are not allowed to modify p
-	 * - only one statement
-	 * - you are not allowed to code anything else than this line of code
-	 */
-	*(p + 5) = 98;
-	/* ...so that this prints 98\n */
-	printf("a[2] = %d\n", a[2]);
-	return (0);
+	if (n < 0)
+	{
+		n1 = -n;
+		_putchar('-');
+	} else
+	{
+		n1 = n;
+	}
+
+	if (n1 / 10)
+	{
+		print_number(n1 / 10);
+	}
+
+	_putchar((n1 % 10) + '0');
 }
