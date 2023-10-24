@@ -1,65 +1,43 @@
 #include "lists.h"
-#include <stdlib.h>
-#include <stdio.h>
 
 /**
- * _ra - reallocates memory for an array of pointers
- * to the nodes in a linked list
- * @list: the old list to append
- * @size: size of the new list (always one more than the old list)
- * @new: new node to add to the list
+ * free_listint_safe - Entry point
+ * Description: Frees a listint_t list.
+ * @h: Pointer to pointer of first node in the linked list
  *
- * Return: pointer to the new list
+ * Return: The size of the list that was free’d
  */
-listint_t **_ra(listint_t **list, size_t size, listint_t *new)
-{
-	listint_t **newlist;
-	size_t i;
 
-	newlist = malloc(size * sizeof(listint_t *));
-	if (newlist == NULL)
+size_t free_listint_safe(listint_t **h)
+{
+	listint_t *current = *h, *node;
+	size_t counter = 0;
+
+	/* Checks if heead node is NULL */
+	if (!h || !*h)
 	{
-		free(list);
-		exit(98);
+		return (counter);
 	}
-	for (i = 0; i < size - 1; i++)
-		newlist[i] = list[i];
-	newlist[i] = new;
-	free(list);
-	return (newlist);
-}
-
-/**
- * free_listint_safe - frees a listint_t linked list.
- * @head: double pointer to the start of the list
- *
- * Return: the number of nodes in the list
- */
-size_t free_listint_safe(listint_t **head)
-{
-	size_t i, num = 0;
-	listint_t **list = NULL;
-	listint_t *next;
-
-	if (head == NULL || *head == NULL)
-		return (num);
-	while (*head != NULL)
+	/* Traverse through the list */
+	while (current)
 	{
-		for (i = 0; i < num; i++)
+		/* Move current node to placeholder node */
+		node = current;
+		/* Move to the next node */
+		current = current->next;
+		if (current <= current->next)
 		{
-			if (*head == list[i])
-			{
-				*head = NULL;
-				free(list);
-				return (num);
-			}
+			*h = NULL;
+			counter++;
+			break;
 		}
-		num++;
-		list = _ra(list, num, *head);
-		next = (*head)->next;
-		free(*head);
-		*head = next;
+		/* Set node pointer to current's next node */
+		node = current->next;
+		current->next = NULL;
+		free(current);
+		current = node;
+		counter++;
 	}
-	free(list);
-	return (num);
+	*h = NULL;
+	return (counter);
 }
